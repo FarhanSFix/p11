@@ -47,7 +47,10 @@ class _DataPendaftaranState extends State<DataPendaftaran> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Data Pendaftaran")),
+      appBar: AppBar(
+        title: Text("Data Pendaftaran"),
+        automaticallyImplyLeading: false,
+      ),
       body: FutureBuilder(
         future: ambilDataPendaftaran(),
         builder: (context, snapshot) {
@@ -130,25 +133,14 @@ class _DataPendaftaranState extends State<DataPendaftaran> {
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () async {
-                                      var url = Uri.parse(
-                                        baseUrl +
-                                            'pendaftaran/${pendaftaranList[index].id!}',
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PendaftaranAdd(
+                                            data: pendaftaranList[index],
+                                          ),
+                                        ),
                                       );
-                                      var respons = await http.put(
-                                        url,
-                                        body: PendaftaranModel(
-                                          nama: "Joko Edit",
-                                          email: "Jokoedit@gmail.com",
-                                          noTelpon: "08964",
-                                          jenisKelamin: "Pria",
-                                          bahasa: "Indonesia, Inggris, Batak",
-                                          agama: "Katolik",
-                                          tanggalDaftar: "2024-01-01",
-                                          jamDaftar: "20:00:00",
-                                        ).toJson(),
-                                      );
-                                      setState(() {});
-                                      Navigator.pop(context);
                                     },
                                     child: Text("Ya"),
                                   ),
