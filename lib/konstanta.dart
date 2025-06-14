@@ -1,1 +1,1 @@
-const baseUrl = 'https://0976-103-87-149-54.ngrok-free.app/';
+const baseUrl = 'http://192.168.0.102:8080/';

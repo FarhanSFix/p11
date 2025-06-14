@@ -2,9 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:p11/KemampuanBerbahasa.dart';
+import 'package:p11/agama.dart';
+import 'package:p11/jamDaftar.dart';
 import 'package:p11/konstanta.dart';
 import 'package:p11/main.dart';
 import 'package:p11/pendaftaran_model.dart';
+import 'package:p11/tanggalDaftar.dart';
 
 class PendaftaranAdd extends StatefulWidget {
   const PendaftaranAdd({super.key});
@@ -14,6 +18,12 @@ class PendaftaranAdd extends StatefulWidget {
 }
 
 class _PendaftaranAddState extends State<PendaftaranAdd> {
+  TextEditingController namaController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController noTelpController = TextEditingController();
+
+  String? jenisKelamin;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,48 +36,98 @@ class _PendaftaranAddState extends State<PendaftaranAdd> {
             MaterialPageRoute(builder: (context) => DataPendaftaran()),
           );
         },
-        child: ListView(
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                var url = Uri.parse(baseUrl + 'pendaftran');
-                var respons = await http.post(
-                  url,
-                  body: PendaftaranModel(
-                    nama: "jokoabc4",
-                    email: "jokoabc4@gmail.com",
-                    noTelpon: "08964",
-                    jenisKelamin: "Pria",
-                    bahasa: "Indonesia, Inggris, Batak",
-                    agama: "Katolik",
-                    tanggalDaftar: "2024-01-01",
-                    jamDaftar: "20:00:00",
-                  ).toJson(),
-                );
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              TextField(
+                controller: namaController,
+                decoration: InputDecoration(label: Text("Nama Lengkap")),
+              ),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(label: Text("Email")),
+              ),
+              TextField(
+                controller: noTelpController,
+                decoration: InputDecoration(label: Text("Nomor Telepon")),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text("Pria"),
+                      value: "Pria",
+                      groupValue: jenisKelamin,
+                      onChanged: (value) {
+                        setState(() {
+                          jenisKelamin = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text("Wanita"),
+                      value: "Wanita",
+                      groupValue: jenisKelamin,
+                      onChanged: (value) {
+                        setState(() {
+                          jenisKelamin = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              KemampuanBerbahasa(),
+              Agama(),
+              TanggalDaftar(),
+              jamDaftar(),
+              ElevatedButton(
+                onPressed: () async {
+                  var url = Uri.parse(baseUrl + 'pendaftaran');
+                  var respons = await http.post(
+                    url,
+                    body: PendaftaranModel(
+                      nama: namaController.text,
+                      email: emailController.text,
+                      noTelpon: noTelpController.text,
+                      jenisKelamin: jenisKelamin,
+                      bahasa: bahasaDipilihList.toString(),
+                      agama: agamaDipilih,
+                      tanggalDaftar: TanggalDaftarController.text,
+                      jamDaftar: jamDaftarController.text,
+                    ).toJson(),
+                  );
 
-                Map<String, dynamic> responsDecode =
-                    json.decode(respons.body) as Map<String, dynamic>;
-                if (responsDecode.toString().contains('error')) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        responsDecode['messages'].toString().replaceAll(
-                          ",",
-                          "\n\n",
+                  Map<String, dynamic> responsDecode =
+                      json.decode(respons.body) as Map<String, dynamic>;
+                  if (responsDecode.toString().contains('error')) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          responsDecode['messages'].toString().replaceAll(
+                            ",",
+                            "\n\n",
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DataPendaftaran()),
-                  );
-                }
-              },
-              child: Text("Simpan"),
-            ),
-          ],
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DataPendaftaran(),
+                      ),
+                    );
+                  }
+                },
+                child: Text("Simpan"),
+              ),
+            ],
+          ),
         ),
       ),
     );
