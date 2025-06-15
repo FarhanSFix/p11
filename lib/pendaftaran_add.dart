@@ -37,6 +37,15 @@ class _PendaftaranAddState extends State<PendaftaranAdd> {
       agamaDipilih = widget.data!.agama!;
       TanggalDaftarController.text = widget.data!.tanggalDaftar!;
       jamDaftarController.text = widget.data!.jamDaftar!;
+    } else {
+      namaController.clear();
+      emailController.clear();
+      noTelpController.clear();
+      jenisKelamin = null;
+      bahasaDipilihList = [];
+      agamaDipilih = '';
+      TanggalDaftarController.clear();
+      jamDaftarController.clear();
     }
   }
 
@@ -119,14 +128,13 @@ class _PendaftaranAddState extends State<PendaftaranAdd> {
                             email: emailController.text,
                             noTelpon: noTelpController.text,
                             jenisKelamin: jenisKelamin,
-                            bahasa: bahasaDipilihList.toString(),
+                            bahasa: bahasaDipilihList.join(','),
                             agama: agamaDipilih,
                             tanggalDaftar: TanggalDaftarController.text,
                             jamDaftar: jamDaftarController.text,
                           ).toJson(),
                         );
                       } else {
-                        // TAMBAH DATA
                         var url = Uri.parse(baseUrl + 'pendaftaran');
                         var respons = await http.post(
                           url,
@@ -135,7 +143,7 @@ class _PendaftaranAddState extends State<PendaftaranAdd> {
                             email: emailController.text,
                             noTelpon: noTelpController.text,
                             jenisKelamin: jenisKelamin,
-                            bahasa: bahasaDipilihList.toString(),
+                            bahasa: bahasaDipilihList.join(','),
                             agama: agamaDipilih,
                             tanggalDaftar: TanggalDaftarController.text,
                             jamDaftar: jamDaftarController.text,
@@ -160,7 +168,6 @@ class _PendaftaranAddState extends State<PendaftaranAdd> {
                         }
                       }
 
-                      // Kembali ke halaman list
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

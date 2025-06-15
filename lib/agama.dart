@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 String? agamaDipilih;
 
 class Agama extends StatefulWidget {
@@ -18,15 +19,16 @@ class _AgamaState extends State<Agama> {
     "Konghucu",
     "Penganut Kepercayaan",
   ];
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
+    return DropdownButton<String>(
       hint: Text("Silahkan Pilih Agama yang Anda Anut"),
-      value: agamaDipilih,
-      items: agamaList.map((e) => DropdownMenuItem(child: Text(e), value: e,)).toList(), 
-      onChanged: (value){
+      value: agamaList.contains(agamaDipilih) ? agamaDipilih : null,
+      items: agamaList
+          .map((e) => DropdownMenuItem(child: Text(e), value: e))
+          .toList(),
+      onChanged: (value) {
         setState(() {
           agamaDipilih = value;
         });
