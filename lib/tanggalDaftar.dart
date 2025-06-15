@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 TextEditingController TanggalDaftarController = TextEditingController();
 
 class TanggalDaftar extends StatefulWidget {
@@ -9,8 +10,6 @@ class TanggalDaftar extends StatefulWidget {
 }
 
 class _TanggalDaftarState extends State<TanggalDaftar> {
-  
-
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -18,20 +17,22 @@ class _TanggalDaftarState extends State<TanggalDaftar> {
       decoration: InputDecoration(
         label: Text("Tanggal Daftar"),
         suffixIcon: IconButton(
-          onPressed: () {pilihTanggal();},
+          onPressed: () {
+            pilihTanggal();
+          },
           icon: Icon(Icons.date_range),
         ),
       ),
     );
   }
-  
+
   Future<void> pilihTanggal() async {
     DateTime? tglDidapat;
 
-    tglDidapat=await showDatePicker(
-      context: context, 
-      firstDate: DateTime(2024), 
-      lastDate: DateTime(2025),
+    tglDidapat = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2026),
     );
 
     if (tglDidapat.toString() != "null") {
